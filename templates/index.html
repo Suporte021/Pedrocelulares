@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PedroCelulares — Orçamento Online</title>
+  <link rel="stylesheet" href="../static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <div class="badge">⚡ Orçamento em segundos</div>
+      <h1>PedroTech<span class="dot">.</span></h1>
+      <p class="hero-sub">Assistência técnica especializada em celulares.<br>Descreva o problema, receba uma estimativa na hora.</p>
+      <a href="#formulario" class="btn-hero">Solicitar orçamento →</a>
+    </div>
+    <div class="hero-phone">
+      <div class="phone-mockup">
+          <span><img src="../static/pedin.png"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FORMULÁRIO -->
+  <section class="form-section" id="formulario">
+    <div class="container">
+      <div class="form-header">
+        <h2>Preencha os dados</h2>
+        <p>Quanto mais detalhes, mais precisa será a estimativa.</p>
+      </div>
+
+      <!-- STEPS -->
+      <div class="steps">
+        <div class="step active" id="step-dot-1"><span>1</span><p>Aparelho</p></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-2"><span>2</span><p>Problema</p></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-3"><span>3</span><p>Resumo</p></div>
+      </div>
+
+      <!-- ETAPA 1 -->
+      <div class="form-card active" id="step-1">
+        <h3>📱 Dados do aparelho</h3>
+        <div class="form-group">
+          <label for="marca">Marca</label>
+          <select id="marca">
+            <option value="">Selecione a marca</option>
+            <option>Samsung</option>
+            <option>iPhone (Apple)</option>
+            <option>Motorola</option>
+            <option>Xiaomi</option>
+            <option>LG</option>
+            <option>Nokia</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="modelo">Modelo</label>
+          <input type="text" id="modelo" placeholder="Ex: Galaxy A54, iPhone 13..." />
+        </div>
+        <div class="form-group">
+          <label for="nome">Seu nome</label>
+          <input type="text" id="nome" placeholder="Como prefere ser chamado?" />
+        </div>
+        <button class="btn-next" onclick="irParaStep(2)">Próximo →</button>
+      </div>
+
+      <!-- ETAPA 2 -->
+      <div class="form-card" id="step-2">
+        <h3>🔧 Qual é o problema?</h3>
+        <div class="form-group">
+          <label for="problema">Tipo de problema</label>
+          <select id="problema" onchange="atualizarEstimativa()">
+            <option value="">Selecione o problema</option>
+            <option value="tela_trincada">Tela trincada / quebrada</option>
+            <option value="tela_sem_imagem">Tela sem imagem / apagada</option>
+            <option value="bateria">Bateria viciada / não carrega</option>
+            <option value="nao_liga">Celular não liga</option>
+            <option value="molhado">Caiu na água / molhado</option>
+            <option value="conector">Conector de carga com defeito</option>
+            <option value="camera">Câmera com defeito</option>
+            <option value="audio">Áudio / microfone / caixa</option>
+            <option value="botoes">Botões com defeito</option>
+            <option value="outro">Outro problema</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descreva o problema (opcional)</label>
+          <textarea id="descricao" placeholder="Pode detalhar mais aqui, vai ajudar o técnico..."></textarea>
+        </div>
+
+        <!-- ESTIMATIVA -->
+        <div class="estimativa-box" id="estimativa-box">
+          <div class="estimativa-label">💰 Estimativa de preço</div>
+          <div class="estimativa-valor" id="estimativa-valor">—</div>
+          <div class="estimativa-obs">*Valor aproximado. O técnico confirmará após avaliação.</div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn-back" onclick="irParaStep(1)">← Voltar</button>
+          <button class="btn-next" onclick="irParaStep(3)">Ver resumo →</button>
+        </div>
+      </div>
+
+      <!-- ETAPA 3 -->
+      <div class="form-card" id="step-3">
+        <h3>✅ Resumo do orçamento</h3>
+        <div class="resumo" id="resumo">
+          <!-- preenchido por JS -->
+        </div>
+        <div class="estimativa-box final" id="estimativa-box-final">
+          <div class="estimativa-label">💰 Estimativa final</div>
+          <div class="estimativa-valor" id="estimativa-final-valor">—</div>
+          <div class="estimativa-obs">*Sujeito a avaliação presencial do técnico.</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn-back" onclick="irParaStep(2)">← Voltar</button>
+          <button class="btn-whatsapp" onclick="enviarWhatsApp()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Enviar pelo WhatsApp
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer>
+    <p>PedroTech © 2026 — Assistência técnica especializada</p>
+  </footer>
+
+  <script>
+
+const estimativas = {
+  tela_trincada:   { min: 80,  max: 300, label: "Tela trincada / quebrada" },
+  tela_sem_imagem: { min: 100, max: 350, label: "Tela sem imagem / apagada" },
+  bateria:         { min: 50,  max: 150, label: "Bateria viciada / não carrega" },
+  nao_liga:        { min: 80,  max: 250, label: "Celular não liga" },
+  molhado:         { min: 100, max: 300, label: "Caiu na água / molhado" },
+  conector:        { min: 60,  max: 180, label: "Conector de carga com defeito" },
+  camera:          { min: 80,  max: 250, label: "Câmera com defeito" },
+  audio:           { min: 60,  max: 200, label: "Áudio / microfone / caixa" },
+  botoes:          { min: 50,  max: 150, label: "Botões com defeito" },
+  outro:           { min: 50,  max: 400, label: "Outro problema" },
+};
+
+// Número do WhatsApp do técnico
+const NUMERO_WHATSAPP = "5574999972902";
+
+// ============================
+// CONTROLE DE ETAPAS
+// ============================
+function irParaStep(numero) {
+  if (numero === 2 && !validarStep1()) return;
+  if (numero === 3 && !validarStep2()) return;
+
+  // Esconde todos os cards
+  document.querySelectorAll(".form-card").forEach(c => c.classList.remove("active"));
+
+  // Atualiza steps visuais
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById(`step-dot-${i}`);
+    dot.classList.remove("active", "done");
+    if (i < numero)  dot.classList.add("done");
+    if (i === numero) dot.classList.add("active");
+  }
+
+  // Mostra o card correto
+  document.getElementById(`step-${numero}`).classList.add("active");
+
+  // Se for etapa 3, preenche o resumo
+  if (numero === 3) preencherResumo();
+
+  // Scroll suave para o formulário
+  document.getElementById("formulario").scrollIntoView({ behavior: "smooth" });
+}
+
+// ============================
+// VALIDAÇÕES
+// ============================
+function validarStep1() {
+  const marca  = document.getElementById("marca").value;
+  const modelo = document.getElementById("modelo").value.trim();
+  const nome   = document.getElementById("nome").value.trim();
+
+  if (!marca) {
+    alerta("Por favor, selecione a marca do celular. 📱");
+    return false;
+  }
+  if (!modelo) {
+    alerta("Por favor, informe o modelo do celular.");
+    return false;
+  }
+  if (!nome) {
+    alerta("Por favor, informe seu nome.");
+    return false;
+  }
+  return true;
+}
+
+function validarStep2() {
+  const problema = document.getElementById("problema").value;
+  if (!problema) {
+    alerta("Por favor, selecione o tipo de problema.");
+    return false;
+  }
+  return true;
+}
+
+// ============================
+// ESTIMATIVA DE PREÇO
+// ============================
+function atualizarEstimativa() {
+  const chave = document.getElementById("problema").value;
+  const box   = document.getElementById("estimativa-box");
+  const valor = document.getElementById("estimativa-valor");
+
+  if (!chave || !estimativas[chave]) {
+    valor.textContent = "—";
+    return;
+  }
+
+  const { min, max } = estimativas[chave];
+  valor.textContent = `R$ ${min} – R$ ${max}`;
+
+  // Animação de destaque
+  box.style.transform = "scale(1.02)";
+  setTimeout(() => box.style.transform = "scale(1)", 200);
+}
+
+// ============================
+// RESUMO FINAL
+// ============================
+function preencherResumo() {
+  const marca     = document.getElementById("marca").value;
+  const modelo    = document.getElementById("modelo").value.trim();
+  const nome      = document.getElementById("nome").value.trim();
+  const chave     = document.getElementById("problema").value;
+  const descricao = document.getElementById("descricao").value.trim();
+
+  const problemaLabel = estimativas[chave]?.label || chave;
+  const { min, max } = estimativas[chave] || {};
+
+  const resumoEl = document.getElementById("resumo");
+  resumoEl.innerHTML = `
+    <div class="resumo-item">
+      <span class="r-label">👤 Nome</span>
+      <span class="r-value">${nome}</span>
+    </div>
+    <div class="resumo-item">
+      <span class="r-label">📱 Marca</span>
+      <span class="r-value">${marca}</span>
+    </div>
+    <div class="resumo-item">
+      <span class="r-label">🔍 Modelo</span>
+      <span class="r-value">${modelo}</span>
+    </div>
+    <div class="resumo-item">
+      <span class="r-label">🔧 Problema</span>
+      <span class="r-value">${problemaLabel}</span>
+    </div>
+    ${descricao ? `
+    <div class="resumo-item">
+      <span class="r-label">📝 Detalhes</span>
+      <span class="r-value" style="max-width:60%;text-align:right;font-size:.9rem">${descricao}</span>
+    </div>` : ""}
+  `;
+
+  // Estimativa no final
+  document.getElementById("estimativa-final-valor").textContent =
+    min ? `R$ ${min} – R$ ${max}` : "—";
+}
+
+// ============================
+// ENVIAR PELO WHATSAPP
+// ============================
+function enviarWhatsApp() {
+  const nome      = document.getElementById("nome").value.trim();
+  const marca     = document.getElementById("marca").value;
+  const modelo    = document.getElementById("modelo").value.trim();
+  const chave     = document.getElementById("problema").value;
+  const descricao = document.getElementById("descricao").value.trim();
+
+  const problemaLabel = estimativas[chave]?.label || chave;
+  const { min, max } = estimativas[chave] || {};
+  const estimativaStr = min ? `R$ ${min} – R$ ${max}` : "A consultar";
+
+  const mensagem =
+`Olá! Gostaria de solicitar um orçamento. 📱
+
+*Nome:* ${nome}
+*Marca:* ${marca}
+*Modelo:* ${modelo}
+*Problema:* ${problemaLabel}
+${descricao ? `*Detalhes:* ${descricao}` : ""}
+*Estimativa esperada:* ${estimativaStr}
+
+Aguardo retorno, obrigado!`;
+
+  const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, "_blank");
+}
+
+// ============================
+// ALERTA CUSTOMIZADO
+// ============================
+function alerta(msg) {
+  // Remove alerta anterior se existir
+  const antigo = document.querySelector(".custom-alert");
+  if (antigo) antigo.remove();
+
+  const div = document.createElement("div");
+  div.className = "custom-alert";
+  div.style.cssText = `
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1c1c28;
+    border: 1px solid #ff4f6a;
+    color: #f0f0f5;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    z-index: 9999;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    animation: fadeUp .3s ease;
+    max-width: 90vw;
+    text-align: center;
+  `;
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+} 
+  </script>
+</body>
+</html>
