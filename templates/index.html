@@ -58,6 +58,13 @@
             <option>Outro</option>
           </select>
         </div>
+        <!-- NOVO: aparece dinamicamente quando a marca tem várias linhas -->
+        <div class="form-group" id="linha-group" style="display:none;">
+          <label for="linha">Linha / Geração</label>
+          <select id="linha">
+            <option value="">Selecione a linha / geração</option>
+          </select>
+        </div>
         <div class="form-group">
           <label for="modelo">Modelo</label>
           <input type="text" id="modelo" placeholder="Ex: Galaxy A54, iPhone 13..." />
@@ -136,21 +143,289 @@
 
   <script>
 
+// ============================================================
+// TABELA DE ESTIMATIVAS — pesquisa de mercado 2026
+// Valores praticados por assistências independentes (autônomas)
+// ============================================================
 const estimativas = {
-  tela_trincada:   { min: 80,  max: 300, label: "Tela trincada / quebrada" },
-  tela_sem_imagem: { min: 100, max: 350, label: "Tela sem imagem / apagada" },
-  bateria:         { min: 50,  max: 150, label: "Bateria viciada / não carrega" },
-  nao_liga:        { min: 80,  max: 250, label: "Celular não liga" },
-  molhado:         { min: 100, max: 300, label: "Caiu na água / molhado" },
-  conector:        { min: 60,  max: 180, label: "Conector de carga com defeito" },
-  camera:          { min: 80,  max: 250, label: "Câmera com defeito" },
-  audio:           { min: 60,  max: 200, label: "Áudio / microfone / caixa" },
-  botoes:          { min: 50,  max: 150, label: "Botões com defeito" },
-  outro:           { min: 50,  max: 400, label: "Outro problema" },
+
+  "iPhone (Apple)": {
+    linhas: {
+      "iPhone antigo (6 ao 11)":   "basico",
+      "iPhone 12 / 13 / SE":       "intermediario",
+      "iPhone 14 / 15 / 16 / 17":  "top",
+    },
+    dados: {
+      basico: {
+        tela_trincada:   { min: 180,  max: 550  },
+        tela_sem_imagem: { min: 200,  max: 600  },
+        bateria:         { min: 120,  max: 250  },
+        nao_liga:        { min: 150,  max: 400  },
+        molhado:         { min: 200,  max: 500  },
+        conector:        { min: 100,  max: 250  },
+        camera:          { min: 150,  max: 400  },
+        audio:           { min: 100,  max: 300  },
+        botoes:          { min: 80,   max: 250  },
+        outro:           { min: 100,  max: 500  },
+      },
+      intermediario: {
+        tela_trincada:   { min: 400,  max: 900  },
+        tela_sem_imagem: { min: 450,  max: 1000 },
+        bateria:         { min: 180,  max: 350  },
+        nao_liga:        { min: 200,  max: 600  },
+        molhado:         { min: 300,  max: 700  },
+        conector:        { min: 150,  max: 350  },
+        camera:          { min: 200,  max: 600  },
+        audio:           { min: 150,  max: 400  },
+        botoes:          { min: 120,  max: 350  },
+        outro:           { min: 150,  max: 700  },
+      },
+      top: {
+        tela_trincada:   { min: 800,  max: 2200 },
+        tela_sem_imagem: { min: 900,  max: 2400 },
+        bateria:         { min: 250,  max: 500  },
+        nao_liga:        { min: 300,  max: 900  },
+        molhado:         { min: 500,  max: 1200 },
+        conector:        { min: 200,  max: 500  },
+        camera:          { min: 300,  max: 900  },
+        audio:           { min: 200,  max: 600  },
+        botoes:          { min: 150,  max: 500  },
+        outro:           { min: 200,  max: 1000 },
+      },
+    }
+  },
+
+  "Samsung": {
+    linhas: {
+      "Galaxy A (linha A)":     "linha_a",
+      "Galaxy S21 / S22 / S23": "linha_s_mid",
+      "Galaxy S24 / S25":       "linha_s_top",
+    },
+    dados: {
+      linha_a: {
+        tela_trincada:   { min: 150,  max: 600  },
+        tela_sem_imagem: { min: 180,  max: 650  },
+        bateria:         { min: 100,  max: 220  },
+        nao_liga:        { min: 120,  max: 400  },
+        molhado:         { min: 150,  max: 500  },
+        conector:        { min: 80,   max: 200  },
+        camera:          { min: 120,  max: 350  },
+        audio:           { min: 80,   max: 250  },
+        botoes:          { min: 70,   max: 200  },
+        outro:           { min: 100,  max: 500  },
+      },
+      linha_s_mid: {
+        tela_trincada:   { min: 500,  max: 1400 },
+        tela_sem_imagem: { min: 550,  max: 1500 },
+        bateria:         { min: 200,  max: 450  },
+        nao_liga:        { min: 200,  max: 700  },
+        molhado:         { min: 300,  max: 900  },
+        conector:        { min: 150,  max: 350  },
+        camera:          { min: 200,  max: 700  },
+        audio:           { min: 150,  max: 400  },
+        botoes:          { min: 100,  max: 350  },
+        outro:           { min: 150,  max: 800  },
+      },
+      linha_s_top: {
+        tela_trincada:   { min: 1200, max: 3300 },
+        tela_sem_imagem: { min: 1300, max: 3500 },
+        bateria:         { min: 300,  max: 500  },
+        nao_liga:        { min: 300,  max: 1000 },
+        molhado:         { min: 500,  max: 1500 },
+        conector:        { min: 200,  max: 500  },
+        camera:          { min: 300,  max: 1000 },
+        audio:           { min: 200,  max: 500  },
+        botoes:          { min: 150,  max: 450  },
+        outro:           { min: 200,  max: 1200 },
+      },
+    }
+  },
+
+  "Motorola": {
+    linhas: {
+      "Moto G (básico ao G14)": "g_basico",
+      "Moto G84, G85, Edge":    "g_plus",
+    },
+    dados: {
+      g_basico: {
+        tela_trincada:   { min: 120,  max: 400  },
+        tela_sem_imagem: { min: 150,  max: 450  },
+        bateria:         { min: 80,   max: 180  },
+        nao_liga:        { min: 100,  max: 300  },
+        molhado:         { min: 130,  max: 400  },
+        conector:        { min: 70,   max: 180  },
+        camera:          { min: 100,  max: 300  },
+        audio:           { min: 70,   max: 200  },
+        botoes:          { min: 60,   max: 180  },
+        outro:           { min: 80,   max: 400  },
+      },
+      g_plus: {
+        tela_trincada:   { min: 300,  max: 900  },
+        tela_sem_imagem: { min: 350,  max: 1000 },
+        bateria:         { min: 150,  max: 300  },
+        nao_liga:        { min: 180,  max: 600  },
+        molhado:         { min: 250,  max: 700  },
+        conector:        { min: 120,  max: 300  },
+        camera:          { min: 180,  max: 550  },
+        audio:           { min: 120,  max: 350  },
+        botoes:          { min: 100,  max: 300  },
+        outro:           { min: 150,  max: 700  },
+      },
+    }
+  },
+
+  "Xiaomi": {
+    linhas: {
+      "Redmi / Redmi Note": "redmi",
+      "Xiaomi 12, 13, 14":  "mi_top",
+    },
+    dados: {
+      redmi: {
+        tela_trincada:   { min: 130,  max: 450  },
+        tela_sem_imagem: { min: 150,  max: 500  },
+        bateria:         { min: 90,   max: 200  },
+        nao_liga:        { min: 110,  max: 350  },
+        molhado:         { min: 150,  max: 450  },
+        conector:        { min: 80,   max: 200  },
+        camera:          { min: 110,  max: 320  },
+        audio:           { min: 80,   max: 230  },
+        botoes:          { min: 70,   max: 200  },
+        outro:           { min: 90,   max: 450  },
+      },
+      mi_top: {
+        tela_trincada:   { min: 400,  max: 1100 },
+        tela_sem_imagem: { min: 450,  max: 1200 },
+        bateria:         { min: 180,  max: 380  },
+        nao_liga:        { min: 200,  max: 700  },
+        molhado:         { min: 300,  max: 800  },
+        conector:        { min: 150,  max: 350  },
+        camera:          { min: 200,  max: 650  },
+        audio:           { min: 150,  max: 380  },
+        botoes:          { min: 120,  max: 320  },
+        outro:           { min: 150,  max: 800  },
+      },
+    }
+  },
+
+  "LG": {
+    linhas: { "Qualquer modelo LG": "geral" },
+    dados: {
+      geral: {
+        tela_trincada:   { min: 150,  max: 600  },
+        tela_sem_imagem: { min: 180,  max: 650  },
+        bateria:         { min: 100,  max: 220  },
+        nao_liga:        { min: 120,  max: 400  },
+        molhado:         { min: 150,  max: 500  },
+        conector:        { min: 80,   max: 220  },
+        camera:          { min: 120,  max: 380  },
+        audio:           { min: 80,   max: 250  },
+        botoes:          { min: 70,   max: 200  },
+        outro:           { min: 100,  max: 500  },
+      }
+    }
+  },
+
+  "Nokia": {
+    linhas: { "Qualquer modelo Nokia": "geral" },
+    dados: {
+      geral: {
+        tela_trincada:   { min: 120,  max: 450  },
+        tela_sem_imagem: { min: 150,  max: 500  },
+        bateria:         { min: 80,   max: 180  },
+        nao_liga:        { min: 100,  max: 350  },
+        molhado:         { min: 130,  max: 450  },
+        conector:        { min: 70,   max: 190  },
+        camera:          { min: 100,  max: 300  },
+        audio:           { min: 70,   max: 220  },
+        botoes:          { min: 60,   max: 180  },
+        outro:           { min: 80,   max: 400  },
+      }
+    }
+  },
+
+  "Outro": {
+    linhas: { "Outro modelo": "geral" },
+    dados: {
+      geral: {
+        tela_trincada:   { min: 120,  max: 700  },
+        tela_sem_imagem: { min: 150,  max: 750  },
+        bateria:         { min: 80,   max: 250  },
+        nao_liga:        { min: 100,  max: 500  },
+        molhado:         { min: 150,  max: 600  },
+        conector:        { min: 70,   max: 220  },
+        camera:          { min: 100,  max: 400  },
+        audio:           { min: 70,   max: 250  },
+        botoes:          { min: 60,   max: 200  },
+        outro:           { min: 80,   max: 600  },
+      }
+    }
+  }
+};
+
+// Labels dos problemas
+const problemasLabel = {
+  tela_trincada:   "Tela trincada / quebrada",
+  tela_sem_imagem: "Tela sem imagem / apagada",
+  bateria:         "Bateria viciada / não carrega",
+  nao_liga:        "Celular não liga",
+  molhado:         "Caiu na água / molhado",
+  conector:        "Conector de carga com defeito",
+  camera:          "Câmera com defeito",
+  audio:           "Áudio / microfone / caixa",
+  botoes:          "Botões com defeito",
+  outro:           "Outro problema",
 };
 
 // Número do WhatsApp do técnico
 const NUMERO_WHATSAPP = "5574999972902";
+
+// Linha selecionada no momento
+let linhaAtual = null;
+
+// ============================
+// PREENCHE SELECT DE LINHA
+// quando o usuário muda a marca
+// ============================
+document.getElementById("marca").addEventListener("change", function () {
+  const marca = this.value;
+  const linhaGroup  = document.getElementById("linha-group");
+  const linhaSelect = document.getElementById("linha");
+
+  linhaSelect.innerHTML = '<option value="">Selecione a linha / geração</option>';
+  linhaAtual = null;
+  document.getElementById("estimativa-valor").textContent = "—";
+
+  if (!marca || !estimativas[marca]) {
+    linhaGroup.style.display = "none";
+    return;
+  }
+
+  const linhas = estimativas[marca].linhas;
+
+  Object.keys(linhas).forEach(nome => {
+    const opt = document.createElement("option");
+    opt.value = linhas[nome];
+    opt.textContent = nome;
+    linhaSelect.appendChild(opt);
+  });
+
+  // Só 1 linha (LG, Nokia, Outro): seleciona automático e esconde o campo
+  const keys = Object.keys(linhas);
+  if (keys.length === 1) {
+    linhaSelect.value = linhas[keys[0]];
+    linhaAtual = linhas[keys[0]];
+    linhaGroup.style.display = "none";
+  } else {
+    linhaGroup.style.display = "block";
+  }
+
+  atualizarEstimativa();
+});
+
+document.getElementById("linha").addEventListener("change", function () {
+  linhaAtual = this.value;
+  atualizarEstimativa();
+});
 
 // ============================
 // CONTROLE DE ETAPAS
@@ -159,10 +434,8 @@ function irParaStep(numero) {
   if (numero === 2 && !validarStep1()) return;
   if (numero === 3 && !validarStep2()) return;
 
-  // Esconde todos os cards
   document.querySelectorAll(".form-card").forEach(c => c.classList.remove("active"));
 
-  // Atualiza steps visuais
   for (let i = 1; i <= 3; i++) {
     const dot = document.getElementById(`step-dot-${i}`);
     dot.classList.remove("active", "done");
@@ -170,13 +443,10 @@ function irParaStep(numero) {
     if (i === numero) dot.classList.add("active");
   }
 
-  // Mostra o card correto
   document.getElementById(`step-${numero}`).classList.add("active");
 
-  // Se for etapa 3, preenche o resumo
   if (numero === 3) preencherResumo();
 
-  // Scroll suave para o formulário
   document.getElementById("formulario").scrollIntoView({ behavior: "smooth" });
 }
 
@@ -185,21 +455,14 @@ function irParaStep(numero) {
 // ============================
 function validarStep1() {
   const marca  = document.getElementById("marca").value;
+  const linha  = document.getElementById("linha").value;
   const modelo = document.getElementById("modelo").value.trim();
   const nome   = document.getElementById("nome").value.trim();
 
-  if (!marca) {
-    alerta("Por favor, selecione a marca do celular. 📱");
-    return false;
-  }
-  if (!modelo) {
-    alerta("Por favor, informe o modelo do celular.");
-    return false;
-  }
-  if (!nome) {
-    alerta("Por favor, informe seu nome.");
-    return false;
-  }
+  if (!marca)  { alerta("Por favor, selecione a marca do celular. 📱"); return false; }
+  if (!linha)  { alerta("Por favor, selecione a linha / geração do aparelho."); return false; }
+  if (!modelo) { alerta("Por favor, informe o modelo do celular."); return false; }
+  if (!nome)   { alerta("Por favor, informe seu nome."); return false; }
   return true;
 }
 
@@ -216,19 +479,25 @@ function validarStep2() {
 // ESTIMATIVA DE PREÇO
 // ============================
 function atualizarEstimativa() {
+  const marca = document.getElementById("marca").value;
   const chave = document.getElementById("problema").value;
   const box   = document.getElementById("estimativa-box");
   const valor = document.getElementById("estimativa-valor");
 
-  if (!chave || !estimativas[chave]) {
+  if (!marca || !linhaAtual || !chave) {
     valor.textContent = "—";
     return;
   }
 
-  const { min, max } = estimativas[chave];
-  valor.textContent = `R$ ${min} – R$ ${max}`;
+  const dadosLinha = estimativas[marca]?.dados[linhaAtual];
+  if (!dadosLinha || !dadosLinha[chave]) {
+    valor.textContent = "—";
+    return;
+  }
 
-  // Animação de destaque
+  const { min, max } = dadosLinha[chave];
+  valor.textContent = `R$ ${min.toLocaleString('pt-BR')} – R$ ${max.toLocaleString('pt-BR')}`;
+
   box.style.transform = "scale(1.02)";
   setTimeout(() => box.style.transform = "scale(1)", 200);
 }
@@ -243,11 +512,14 @@ function preencherResumo() {
   const chave     = document.getElementById("problema").value;
   const descricao = document.getElementById("descricao").value.trim();
 
-  const problemaLabel = estimativas[chave]?.label || chave;
-  const { min, max } = estimativas[chave] || {};
+  const linhaSelect = document.getElementById("linha");
+  const linhaTexto  = linhaSelect.options[linhaSelect.selectedIndex]?.text || "";
 
-  const resumoEl = document.getElementById("resumo");
-  resumoEl.innerHTML = `
+  const pLabel     = problemasLabel[chave] || chave;
+  const dadosLinha = estimativas[marca]?.dados[linhaAtual];
+  const { min, max } = dadosLinha?.[chave] || {};
+
+  document.getElementById("resumo").innerHTML = `
     <div class="resumo-item">
       <span class="r-label">👤 Nome</span>
       <span class="r-value">${nome}</span>
@@ -256,13 +528,18 @@ function preencherResumo() {
       <span class="r-label">📱 Marca</span>
       <span class="r-value">${marca}</span>
     </div>
+    ${linhaTexto ? `
+    <div class="resumo-item">
+      <span class="r-label">📊 Linha</span>
+      <span class="r-value">${linhaTexto}</span>
+    </div>` : ""}
     <div class="resumo-item">
       <span class="r-label">🔍 Modelo</span>
       <span class="r-value">${modelo}</span>
     </div>
     <div class="resumo-item">
       <span class="r-label">🔧 Problema</span>
-      <span class="r-value">${problemaLabel}</span>
+      <span class="r-value">${pLabel}</span>
     </div>
     ${descricao ? `
     <div class="resumo-item">
@@ -271,9 +548,8 @@ function preencherResumo() {
     </div>` : ""}
   `;
 
-  // Estimativa no final
   document.getElementById("estimativa-final-valor").textContent =
-    min ? `R$ ${min} – R$ ${max}` : "—";
+    min ? `R$ ${min.toLocaleString('pt-BR')} – R$ ${max.toLocaleString('pt-BR')}` : "—";
 }
 
 // ============================
@@ -286,17 +562,23 @@ function enviarWhatsApp() {
   const chave     = document.getElementById("problema").value;
   const descricao = document.getElementById("descricao").value.trim();
 
-  const problemaLabel = estimativas[chave]?.label || chave;
-  const { min, max } = estimativas[chave] || {};
-  const estimativaStr = min ? `R$ ${min} – R$ ${max}` : "A consultar";
+  const linhaSelect = document.getElementById("linha");
+  const linhaTexto  = linhaSelect.options[linhaSelect.selectedIndex]?.text || "";
+
+  const pLabel     = problemasLabel[chave] || chave;
+  const dadosLinha = estimativas[marca]?.dados[linhaAtual];
+  const { min, max } = dadosLinha?.[chave] || {};
+  const estimativaStr = min
+    ? `R$ ${min.toLocaleString('pt-BR')} – R$ ${max.toLocaleString('pt-BR')}`
+    : "A consultar";
 
   const mensagem =
 `Olá! Gostaria de solicitar um orçamento. 📱
 
 *Nome:* ${nome}
-*Marca:* ${marca}
+*Marca:* ${marca}${linhaTexto ? `\n*Linha:* ${linhaTexto}` : ""}
 *Modelo:* ${modelo}
-*Problema:* ${problemaLabel}
+*Problema:* ${pLabel}
 ${descricao ? `*Detalhes:* ${descricao}` : ""}
 *Estimativa esperada:* ${estimativaStr}
 
@@ -310,7 +592,6 @@ Aguardo retorno, obrigado!`;
 // ALERTA CUSTOMIZADO
 // ============================
 function alerta(msg) {
-  // Remove alerta anterior se existir
   const antigo = document.querySelector(".custom-alert");
   if (antigo) antigo.remove();
 
@@ -337,7 +618,8 @@ function alerta(msg) {
   div.textContent = msg;
   document.body.appendChild(div);
   setTimeout(() => div.remove(), 3000);
-} 
+}
+
   </script>
 </body>
 </html>
