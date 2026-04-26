@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PedroCelulares — Orçamento Online</title>
-  <link rel="stylesheet" href="../static/style.css" />
+  <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 </head>
 <body>
@@ -20,7 +20,7 @@
     </div>
     <div class="hero-phone">
       <div class="phone-mockup">
-          <span><img src="../static/pedin.png"></span>
+          <span><img src="{{url_for('static',filename='pedin.png')}}"></span>
       </div>
     </div>
   </header>
