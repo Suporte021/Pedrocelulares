@@ -92,6 +92,7 @@
             <option value="camera">Câmera com defeito</option>
             <option value="audio">Áudio / microfone / caixa</option>
             <option value="botoes">Botões com defeito</option>
+            <option value="traseira">Traseira quebrada / tampa traseira</option>
             <option value="outro">Outro problema</option>
           </select>
         </div>
@@ -166,6 +167,7 @@ const estimativas = {
         camera:          { min: 150,  max: 400  },
         audio:           { min: 100,  max: 300  },
         botoes:          { min: 80,   max: 250  },
+        traseira:        { min: 150, max: 400 },
         outro:           { min: 100,  max: 500  },
       },
       intermediario: {
@@ -178,6 +180,7 @@ const estimativas = {
         camera:          { min: 200,  max: 600  },
         audio:           { min: 150,  max: 400  },
         botoes:          { min: 120,  max: 350  },
+        traseira:        { min: 150, max: 400 },
         outro:           { min: 150,  max: 700  },
       },
       top: {
@@ -190,6 +193,7 @@ const estimativas = {
         camera:          { min: 300,  max: 900  },
         audio:           { min: 200,  max: 600  },
         botoes:          { min: 150,  max: 500  },
+        traseira:        { min: 800, max: 1800 },
         outro:           { min: 200,  max: 1000 },
       },
     }
@@ -212,6 +216,7 @@ const estimativas = {
         camera:          { min: 120,  max: 350  },
         audio:           { min: 80,   max: 250  },
         botoes:          { min: 70,   max: 200  },
+        traseira: { min: 120, max: 300 },
         outro:           { min: 100,  max: 500  },
       },
       linha_s_mid: {
@@ -224,6 +229,7 @@ const estimativas = {
         camera:          { min: 200,  max: 700  },
         audio:           { min: 150,  max: 400  },
         botoes:          { min: 100,  max: 350  },
+        traseira:        { min: 300, max: 900 },
         outro:           { min: 150,  max: 800  },
       },
       linha_s_top: {
@@ -236,6 +242,7 @@ const estimativas = {
         camera:          { min: 300,  max: 1000 },
         audio:           { min: 200,  max: 500  },
         botoes:          { min: 150,  max: 450  },
+        traseira:        { min: 800, max: 2000 },
         outro:           { min: 200,  max: 1200 },
       },
     }
@@ -257,6 +264,7 @@ const estimativas = {
         camera:          { min: 100,  max: 300  },
         audio:           { min: 70,   max: 200  },
         botoes:          { min: 60,   max: 180  },
+        traseira:        { min: 100, max: 250   },
         outro:           { min: 80,   max: 400  },
       },
       g_plus: {
@@ -269,6 +277,7 @@ const estimativas = {
         camera:          { min: 180,  max: 550  },
         audio:           { min: 120,  max: 350  },
         botoes:          { min: 100,  max: 300  },
+        traseira:        { min: 200, max: 500   },
         outro:           { min: 150,  max: 700  },
       },
     }
@@ -290,6 +299,7 @@ const estimativas = {
         camera:          { min: 110,  max: 320  },
         audio:           { min: 80,   max: 230  },
         botoes:          { min: 70,   max: 200  },
+        traseira:        { min: 100, max: 300   },
         outro:           { min: 90,   max: 450  },
       },
       mi_top: {
@@ -302,6 +312,7 @@ const estimativas = {
         camera:          { min: 200,  max: 650  },
         audio:           { min: 150,  max: 380  },
         botoes:          { min: 120,  max: 320  },
+        traseira:        { min: 250, max: 700   },
         outro:           { min: 150,  max: 800  },
       },
     }
@@ -320,6 +331,7 @@ const estimativas = {
         camera:          { min: 120,  max: 380  },
         audio:           { min: 80,   max: 250  },
         botoes:          { min: 70,   max: 200  },
+        traseira:        { min: 120, max: 300   },
         outro:           { min: 100,  max: 500  },
       }
     }
@@ -338,6 +350,7 @@ const estimativas = {
         camera:          { min: 100,  max: 300  },
         audio:           { min: 70,   max: 220  },
         botoes:          { min: 60,   max: 180  },
+        traseira:        { min: 100, max: 250   },
         outro:           { min: 80,   max: 400  },
       }
     }
@@ -356,6 +369,7 @@ const estimativas = {
         camera:          { min: 100,  max: 400  },
         audio:           { min: 70,   max: 250  },
         botoes:          { min: 60,   max: 200  },
+        traseira:        { min: 100, max: 400   },
         outro:           { min: 80,   max: 600  },
       }
     }
@@ -373,6 +387,7 @@ const problemasLabel = {
   camera:          "Câmera com defeito",
   audio:           "Áudio / microfone / caixa",
   botoes:          "Botões com defeito",
+  traseira: "Traseira quebrada / tampa traseira",
   outro:           "Outro problema",
 };
 
